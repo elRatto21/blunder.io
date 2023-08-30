@@ -1,1 +1,0 @@
-blunder.io uses a microservice architecture
