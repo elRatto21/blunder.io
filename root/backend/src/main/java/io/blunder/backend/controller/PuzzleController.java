@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.blunder.backend.model.Puzzle;
 import io.blunder.backend.service.PuzzleService;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/puzzle")
 public class PuzzleController {
@@ -19,7 +18,7 @@ public class PuzzleController {
 	@Autowired
 	private PuzzleService puzzleService;
 
-	@CrossOrigin(origins = "*")
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping
 	public ResponseEntity<?> getRandomPuzzle() {
 		Puzzle puzzle = puzzleService.getRandomPuzzle();
