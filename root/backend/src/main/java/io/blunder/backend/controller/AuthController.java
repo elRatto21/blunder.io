@@ -115,7 +115,10 @@ public class AuthController {
 			userInfo.setBlitzElo(500);
 			userInfo.setRapidElo(500);
 			userInfo.setPuzzleElo(500);
-			userInfo.setMatches(new ArrayList<Long>());
+			userInfo.setMatches(0);
+			userInfo.setWins(0);
+			userInfo.setLosses(0);
+			userInfo.setDraws(0);
 			userInfo.setFriends(new ArrayList<String>());
 			userDetailsService.save(userInfo);
 			
