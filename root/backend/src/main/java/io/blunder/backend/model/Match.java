@@ -1,12 +1,13 @@
 package io.blunder.backend.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "game_match")
 @Table(name = "game_match")
 public class Match {
 	
@@ -24,6 +25,8 @@ public class Match {
 	private String time;
 	
 	private ArrayList<String> moves;
+	
+	private String date;
 
 	public String getMatchId() {
 		return matchId;
@@ -79,6 +82,14 @@ public class Match {
 
 	public void setMoves(ArrayList<String> moves) {
 		this.moves = moves;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }
