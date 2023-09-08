@@ -26,8 +26,14 @@ public class UserInfo {
 	private int rapidElo;
 
 	private int puzzleElo;
-
-	private List<Long> matches;
+	
+	private int matches;
+	
+	private int wins;
+	
+	private int losses;
+	
+	private int draws;
 
 	private List<String> friends;
 
@@ -87,20 +93,44 @@ public class UserInfo {
 		this.puzzleElo = puzzleElo;
 	}
 
-	public List<Long> getMatches() {
-		return matches;
-	}
-
-	public void setMatches(List<Long> matches) {
-		this.matches = matches;
-	}
-
 	public List<String> getFriends() {
 		return friends;
 	}
 
 	public void setFriends(List<String> friends) {
 		this.friends = friends;
+	}
+
+	public int getMatches() {
+		return matches;
+	}
+
+	public void setMatches(int matches) {
+		this.matches = matches;
+	}
+
+	public int getWins() {
+		return wins;
+	}
+
+	public void setWins(int wins) {
+		this.wins = wins;
+	}
+
+	public int getLosses() {
+		return losses;
+	}
+
+	public void setLosses(int losses) {
+		this.losses = losses;
+	}
+
+	public int getDraws() {
+		return draws;
+	}
+
+	public void setDraws(int draws) {
+		this.draws = draws;
 	}
 
 }
