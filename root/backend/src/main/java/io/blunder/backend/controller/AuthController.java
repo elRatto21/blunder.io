@@ -114,7 +114,7 @@ public class AuthController {
 			userInfo.setBulletElo(500);
 			userInfo.setBlitzElo(500);
 			userInfo.setRapidElo(500);
-			userInfo.setPuzzleElo(500);
+			userInfo.setPuzzleElo(1000);
 			userInfo.setMatches(0);
 			userInfo.setWins(0);
 			userInfo.setLosses(0);
