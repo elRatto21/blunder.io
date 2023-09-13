@@ -15,5 +15,9 @@ public class PuzzleService {
 	public Puzzle getRandomPuzzle() {
 		return this.puzzleRepo.getRandomPuzzle();
 	}
+	
+	public Puzzle findById(String id) {
+		return this.puzzleRepo.findById(id).orElseThrow();
+	}
 
 }
