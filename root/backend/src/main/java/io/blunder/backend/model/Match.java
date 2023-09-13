@@ -20,6 +20,10 @@ public class Match {
 	
 	private String black;
 	
+	private int whiteElo;
+	
+	private int blackElo;
+	
 	private String winner;
 	
 	private String time;
@@ -90,6 +94,22 @@ public class Match {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public int getWhiteElo() {
+		return whiteElo;
+	}
+
+	public void setWhiteElo(int whiteElo) {
+		this.whiteElo = whiteElo;
+	}
+
+	public int getBlackElo() {
+		return blackElo;
+	}
+
+	public void setBlackElo(int blackElo) {
+		this.blackElo = blackElo;
 	}
 
 }
