@@ -1,6 +1,5 @@
 package io.blunder.backend.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -137,8 +136,8 @@ public class SocketService implements InitializingBean {
 			LOG.info("Move {} made by {} with SessionId {} in room {}", move, moveBy, client.getSessionId(),
 					payload.split(";")[0]);
 		});
-
-		socketIoServer.addEventListener("match-end", String.class, (client, payload, ackRequest) -> {
+		
+		socketIoServer.addEventListener("match-time", String.class, (client, payload, ackRequest) -> {
 			String winner = playersBySessionId.get(client.getSessionId());
 
 			Match match = matches.get(payload.split(";")[0]);
@@ -161,7 +160,95 @@ public class SocketService implements InitializingBean {
 			
 			UserInfo looserInfo = userInfoService.getUserByUsername(looserName).orElseThrow();
 			
-			socketIoServer.getClient(looser).sendEvent("match-end", payload.split(";")[1]);
+			socketIoServer.getClient(looser).sendEvent("match-time", payload.split(";")[1]);
+			socketIoServer.getClient(looser).leaveRooms(socketIoServer.getClient(looser).getAllRooms());
+			socketIoServer.getClient(client.getSessionId()).leaveRooms(socketIoServer.getClient(client.getSessionId()).getAllRooms());
+			
+			winnerInfo.setMatches(winnerInfo.getMatches() + 1);
+			winnerInfo.setWins(winnerInfo.getWins() + 1);
+			
+			looserInfo.setMatches(looserInfo.getMatches() + 1);
+			looserInfo.setLosses(looserInfo.getLosses() + 1);
+			
+			int[] elos = MatchHelper.calculateElo(winnerInfo, looserInfo, match.getTime());
+			
+			int whiteElo = 0;
+			int blackElo = 0;
+			
+			switch(match.getTime()) {
+			case "Bullet":
+				if(winnerInfo.getUsername().equals(match.getWhite())) {
+					whiteElo = elos[0] - winnerInfo.getBulletElo();
+					blackElo = looserInfo.getBulletElo() - elos[1];
+				} else {
+					blackElo = elos[0] - winnerInfo.getBulletElo();
+					whiteElo = looserInfo.getBulletElo() - elos[1];
+				}
+				
+				winnerInfo.setBulletElo(elos[0]);
+				looserInfo.setBulletElo(elos[1]);
+				break;
+			case "Blitz":
+				if(winnerInfo.getUsername().equals(match.getWhite())) {
+					whiteElo = elos[0] - winnerInfo.getBlitzElo();
+					blackElo = looserInfo.getBlitzElo() - elos[1];
+				} else {
+					blackElo = elos[0] - winnerInfo.getBlitzElo();
+					whiteElo = looserInfo.getBlitzElo() - elos[1];
+				}
+				
+				winnerInfo.setBlitzElo(elos[0]);
+				looserInfo.setBlitzElo(elos[1]);
+				break;
+			case "Rapid":
+				if(winnerInfo.getUsername().equals(match.getWhite())) {
+					whiteElo = elos[0] - winnerInfo.getRapidElo();
+					blackElo = looserInfo.getRapidElo() - elos[1];
+				} else {
+					blackElo = elos[0] - winnerInfo.getRapidElo();
+					whiteElo = looserInfo.getRapidElo() - elos[1];
+				}
+				
+				winnerInfo.setRapidElo(elos[0]);
+				looserInfo.setRapidElo(elos[1]);
+				break;
+			}
+			
+			userInfoService.save(winnerInfo);
+			userInfoService.save(looserInfo);
+			
+			match.setWhiteElo(whiteElo);
+			match.setBlackElo(blackElo);
+			
+			matchRepo.save(match);
+			
+			LOG.info("Match finished");
+		});
+
+		socketIoServer.addEventListener("match-mate", String.class, (client, payload, ackRequest) -> {
+			String winner = playersBySessionId.get(client.getSessionId());
+
+			Match match = matches.get(payload.split(";")[0]);
+			match.setWinner(winner);
+			match.setDate(LocalDateTime.now().toString());
+			
+			updateMatch(match);
+			
+			UserInfo winnerInfo = userInfoService.getUserByUsername(winner).orElseThrow();
+			
+			UUID looser;
+			String looserName;
+			if(winner.equals(match.getWhite())) {
+				looser = playersByUsername.get(match.getBlack());
+				looserName = match.getBlack();
+			} else {
+				looser = playersByUsername.get(match.getWhite());
+				looserName = match.getWhite();
+			}
+			
+			UserInfo looserInfo = userInfoService.getUserByUsername(looserName).orElseThrow();
+			
+			socketIoServer.getClient(looser).sendEvent("match-mate", payload.split(";")[1]);
 			socketIoServer.getClient(looser).leaveRooms(socketIoServer.getClient(looser).getAllRooms());
 			socketIoServer.getClient(client.getSessionId()).leaveRooms(socketIoServer.getClient(client.getSessionId()).getAllRooms());
 			
@@ -226,6 +313,50 @@ public class SocketService implements InitializingBean {
 			LOG.info("Match finished");
 		});
 		
+		socketIoServer.addEventListener("match-draw", String.class, (client, payload, ackRequest) -> {
+			String winner = playersBySessionId.get(client.getSessionId());
+
+			Match match = matches.get(payload.split(";")[0]);
+			match.setWinner(winner);
+			match.setDate(LocalDateTime.now().toString());
+			
+			updateMatch(match);
+			
+			UserInfo winnerInfo = userInfoService.getUserByUsername(winner).orElseThrow();
+			
+			UUID looser;
+			String looserName;
+			if(winner.equals(match.getWhite())) {
+				looser = playersByUsername.get(match.getBlack());
+				looserName = match.getBlack();
+			} else {
+				looser = playersByUsername.get(match.getWhite());
+				looserName = match.getWhite();
+			}
+			
+			UserInfo looserInfo = userInfoService.getUserByUsername(looserName).orElseThrow();
+			
+			socketIoServer.getClient(looser).sendEvent("match-draw", payload.split(";")[1]);
+			socketIoServer.getClient(looser).leaveRooms(socketIoServer.getClient(looser).getAllRooms());
+			socketIoServer.getClient(client.getSessionId()).leaveRooms(socketIoServer.getClient(client.getSessionId()).getAllRooms());
+			
+			winnerInfo.setMatches(winnerInfo.getMatches() + 1);
+			winnerInfo.setDraws(winnerInfo.getDraws() + 1);
+			
+			looserInfo.setMatches(looserInfo.getMatches() + 1);
+			looserInfo.setDraws(looserInfo.getDraws() + 1);
+			
+			userInfoService.save(winnerInfo);
+			userInfoService.save(looserInfo);
+			
+			match.setWhiteElo(0);
+			match.setBlackElo(0);
+			
+			matchRepo.save(match);
+			
+			LOG.info("Match finished");
+		});
+		
 		socketIoServer.addEventListener("puzzle-win", String.class, (client, payload, ackRequest) -> {
 			String puzzleId = payload;
 			Puzzle puzzle = this.puzzleService.findById(puzzleId);
@@ -242,7 +373,7 @@ public class SocketService implements InitializingBean {
 			String username = playersBySessionId.get(client.getSessionId());
 			UserInfo userInfo = this.userInfoService.getUserByUsername(username).orElseThrow();
 			
-			userInfo.setPuzzleElo(userInfo.getPuzzleElo() - Long.valueOf(puzzle.getRating() / 200).intValue());
+			userInfo.setPuzzleElo(userInfo.getPuzzleElo() - (15 - Long.valueOf(puzzle.getRating() / 150).intValue()));
 			this.userInfoService.save(userInfo);
 		});
 		
