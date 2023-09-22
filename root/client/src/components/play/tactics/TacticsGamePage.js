@@ -89,15 +89,15 @@ function TacticsGamePage() {
       }
     }
     if (completed || showReset) {
-      setFen(game.fen())
+      setFen(game.fen());
       try {
         game.move({
-          from: 'a2',
-          to: 'g5',
-          promotion: "q"
-        })
+          from: "a2",
+          to: "g5",
+          promotion: "q",
+        });
       } catch (error) {}
-      setFen(game.fen())
+      setFen(game.fen());
     }
   }, [game, moveIndex, moves, playerSide, completed, showReset]);
 
@@ -159,7 +159,7 @@ function TacticsGamePage() {
           to: square,
           promotion: "q",
         });
-        console.log("move made " + move)
+        console.log("move made " + move);
       } catch (error) {}
 
       if (move === null) {
@@ -193,8 +193,7 @@ function TacticsGamePage() {
         } else {
           setRightClickedSquares({
             ...rightClickedSquares,
-            [square]:
-                { backgroundColor: "rgba(255, 0, 0, 0.75)" },
+            [square]: { backgroundColor: "rgba(255, 0, 0, 0.75)" },
           });
           setSuccessMessage("Wrong move.");
           setTries((prevTries) => prevTries + 1);
@@ -222,8 +221,8 @@ function TacticsGamePage() {
   }
 
   return (
-    <div className="pt-32 grid grid-cols-4 grid-rows-1 gap-0 w-full justify-center items-center">
-      <div className="w-full h-full col-span-1 flex flex-col justify-center items-end"></div>
+    <div className="grid min-h-screen grid-cols-4 grid-rows-1 gap-0 w-full justify-center items-center dark:bg-gray-800">
+      <div className="w-full col-span-1 flex flex-col justify-center items-end"></div>
       <div className="w-full col-span-2 flex justify-center items-center">
         {fen && (
           <div className="w-2/3">
@@ -248,23 +247,32 @@ function TacticsGamePage() {
         )}
       </div>
 
-      <div className="col-start-4 w-full h-full flex flex-col justify-center items-start">
-        <div className="w-2/3 h-1/2 shadow-[0_1px_5px_rgb(0,0,0,0.15)] gap-12 flex justify-center items-center flex-col rounded-lg">
+      <div className="col-start-4 w-full h-full flex flex-col justify-center items-star">
+        <div className="w-2/3 h-1/4 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] gap-6 flex dark:bg-gray-700 dark:text-white justify-center items-center flex-col rounded-lg">
           <div className="text-2xl font-bold">{successMessage}</div>
           {completed || showReset ? (
             <div className="flex justify-center flex-col w-full items-center gap-4">
+              {completed ? (
+                <span className="text-green-700 font-semibold">
+                  +{Math.floor(puzzleData.rating / 200)} ELO
+                </span>
+              ) : (
+                <span className="text-red-700 font-semibold">
+                  -{Math.floor((15 - puzzleData.rating / 150)).toString()} Elo
+                </span>
+              )}
+
               <button
                 onClick={resetPuzzle}
-                className="w-3/4 py-2 px-4 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-gray-600 active:bg-blue-800"
+                className="w-3/4 py-2 px-4 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-70 active:bg-blue-800"
               >
                 Restart
               </button>
               <button
                 onClick={newPuzzle}
-                className="w-3/4 py-2 px-4 text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 dark:bg-gray-700 dark:hover:bg-gray-600 active:bg-green-700"
+                className="w-3/4 py-2 px-4 text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 active:bg-green-700"
               >
                 Next
-                {completed ? (<span className="text-green-700">+{puzzleData.rating / 200}</span>): (<span className="text-red-700">-{puzzleData.rating / 200}</span>)}
               </button>
             </div>
           ) : null}
