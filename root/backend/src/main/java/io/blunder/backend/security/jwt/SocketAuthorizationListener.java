@@ -39,6 +39,6 @@ public class SocketAuthorizationListener implements AuthorizationListener {
 
 	public boolean isLocalhost(HandshakeData data) {
 		String remoteAddress = data.getAddress().getHostString();
-		return "localhost".equals(remoteAddress) || "127.0.0.1".equals(remoteAddress);
+		return "192.168.32.1".equals(remoteAddress);
 	}
 }
