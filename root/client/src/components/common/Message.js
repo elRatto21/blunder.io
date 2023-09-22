@@ -38,9 +38,9 @@ const Message = ({ username, content }) => {
         isCurrentUser ? "text-right" : "text-left"
       } mb-4 mt-4 flex flex-col items-${isCurrentUser ? "end" : "start"}`}
     >
-      <span className="font-bold">{username}</span>
+      <span className="font-bold dark:text-white">{username}</span>
       <div
-        className="rounded-lg px-5 py-2"
+        className="rounded-lg px-5 py-2 dark:text-gray-100 dark:shadow-[0_1px_5px_rgb(0,0,0,0.2)]"
         style={messageStyle}
       >
         <div style={contentStyle}>{content}</div>

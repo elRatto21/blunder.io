@@ -34,7 +34,7 @@ const GameRooms = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-blue-600 dark:text-white">
           Active Game Rooms

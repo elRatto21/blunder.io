@@ -3,8 +3,8 @@ import { faChess } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
     return (
-        <div className="dark:bg-gray-800 pb-4 fixed top-0 left-0 right-0 z-10">
-            <nav className="bg-white dark:bg-gray-800 shadow-lg">
+        <div className="dark:bg-gray-700 pb-4 dark:pb-0 fixed top-0 left-0 right-0 z-10">
+            <nav className="bg-white dark:bg-gray-700 shadow-lg dark:shadow-[0_1px_5px_rgb(0,0,0,0)]">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center">

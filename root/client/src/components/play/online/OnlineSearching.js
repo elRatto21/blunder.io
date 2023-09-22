@@ -3,7 +3,7 @@ import { ThreeDots } from "react-loader-spinner";
 
 function OnlineSearching() {
   return (
-    <div className="dark:bg-gray-800 flex flex-col md:flex-row min-h-screen pt-16">
+    <div className="dark:bg-gray-800 flex flex-col md:flex-row min-h-screen pt-16 dark:text-white">
       <div id="board" className="w-2/5 p-8">
         <Chessboard
           id="ClickToMove"
@@ -17,7 +17,7 @@ function OnlineSearching() {
           }}
         />
       </div>
-      <div className="col-start-3 flex justify-center items-center m-auto flex-col rounded-lg shadow-[0_1px_5px_rgb(0,0,0,0.15)] h-fit p-6">
+      <div className="col-start-3 flex dark:bg-gray-700 justify-center items-center m-auto flex-col rounded-lg shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] h-fit p-6">
         <div className="text-2xl font-semibold">Searching for an opponent</div>
         <ThreeDots
           height="50"

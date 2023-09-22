@@ -33,14 +33,14 @@ function OnlinePlayButton() {
       <div className="flex flex-col">
         <label
           htmlFor="game-time"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="text-sm font-medium text-gray-700 dark:text-white"
         >
           Game time
         </label>
         <select
           id="game-time"
           name="game-time"
-          className="mt-1 w-full py-2 px-3 border border-gray-300 dark:border-slate-700 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          className="mt-1 w-full py-2 px-3 border border-gray-300 dark:border-slate-700 bg-white dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           value={timeInput}
           onChange={handleInputChange}
         >
@@ -49,7 +49,7 @@ function OnlinePlayButton() {
           <option>Rapid</option>
         </select>
       </div>
-      <button onClick={createRoom} className="flex-grow py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:hover:bg-gray-600">
+      <button onClick={createRoom} className="flex-grow py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
         Play
       </button>
     </div>

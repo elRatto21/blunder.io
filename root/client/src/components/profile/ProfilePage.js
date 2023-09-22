@@ -65,20 +65,20 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="h-3/4 bg-white dark:bg-gray-800 flex md:flex-row flex-col justify-center gap-6 p-8 pt-24">
+    <div className="h-3/4 bg-white dark:text-white dark:bg-gray-800 flex md:flex-row flex-col justify-center gap-6 p-8 pt-24">
       <div>
         {infos && (
-          <div className="self-center place-self-center w-fit h-full p-8 rounded-lg shadow-[0_1px_5px_rgb(0,0,0,0.15)] flex flex-col items-center justify-center">
+          <div className="w-fit h-fit p-8 rounded-lg dark:bg-gray-700 shadow-[0_1px_5px_rgb(0,0,0,0.15)] flex flex-col items-center justify-start">
             <img
-              className="w-32 h-32 rounded-full mb-4 bg-gray-100 p-2"
-              src="https://i.imgflip.com/7301p1.png?a470688"
+              className="w-32 h-32 rounded-full mb-4 bg-gray-100"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl5PMtio9Xhr0shasWnqRldXzbx0duvbhaRemQ_45UOMvoOko8hMHfrvtuOfw0a9Baw&usqp=CAU"
               alt="Profile"
               width="150px"
               height="150px"
             />
             <div className="font-medium text-3xl mb-1">{infos.username}</div>
             <div className="font-medium text-lg">{infos.bio}</div>
-            <div className="flex flex-col justify-between mb-8 mt-8 rounded-lg p-6 gap-4 text-xl text-center shadow-[0_1px_5px_rgb(0,0,0,0.15)]">
+            <div className="flex flex-col justify-between dark:shadow-[0_1px_5px_rgb(0,0,0,0.3)] mb-8 mt-8 rounded-lg p-6 gap-4 text-xl text-center shadow-[0_1px_5px_rgb(0,0,0,0.15)]">
               <span className="font-semibold">{infos.matches} Matches</span>
               <span>{infos.wins} Wins</span>
               <span>{infos.draws} Draws</span>
@@ -87,14 +87,14 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
-      <div className="h-full p-8 rounded-lg shadow-[0_1px_5px_rgb(0,0,0,0.15)] flex-grow md:max-w-4xl">
+      <div className="h-full p-8 rounded-lg shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:bg-gray-700 flex-grow md:max-w-4xl">
         <h1 className="text-3xl font-bold text-center mb-7">Stats</h1>
         {infos && (
           <div className="grid grid-cols-4 gap-4 mb-8">
             {Object.entries(infos.category).map(([key, category]) => (
               <div
                 key={key}
-                className="flex flex-col items-center shadow-[0_1px_5px_rgb(0,0,0,0.15)] p-4 rounded-lg"
+                className="flex flex-col items-center dark:shadow-[0_1px_5px_rgb(0,0,0,0.3)] shadow-[0_1px_5px_rgb(0,0,0,0.15)] p-4 rounded-lg"
               >
                 <FontAwesomeIcon
                   icon={category.icon}

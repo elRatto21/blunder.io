@@ -51,12 +51,12 @@ function OnlineGameChat() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6 mt-8">
       <h2 className="text-xl font-bold text-blue-600 dark:text-white">
         Chat
       </h2>
 
-      <div className="h-[26rem] xl:h-[42rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
+      <div className="h-[25rem] xl:h-[40rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
         {messages.map((message) => (
           <Message username={message.username} content={message.content} />
         ))}
@@ -64,7 +64,7 @@ function OnlineGameChat() {
       </div>
 
       <form
-        className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] p-2 rounded-md flex"
+        className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] p-2 rounded-md flex"
         onSubmit={handleSubmit}
       >
         <input
