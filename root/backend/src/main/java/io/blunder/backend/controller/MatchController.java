@@ -57,8 +57,17 @@ public class MatchController {
 			match.setMatchId(roomId);
 			gameService.updateMatch(match);
 		}
-		LOG.info("Room with id {} and time {} created", roomId, time);
+		LOG.debug("Room with id {} and time {} created", roomId, time);
 		return new ResponseEntity<>(roomId, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{roomId}/stats")
+	public ResponseEntity<?> getRoomStatsById(@PathVariable String roomId) {
+		if(gameService.getMatchById(roomId).getPlayers().size() == 2) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		} else {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 	}
 
 	@GetMapping("/stats")
