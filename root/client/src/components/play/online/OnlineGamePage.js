@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import OnlineGameChat from "../online/OnlineGameChat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const GamePage = () => {
   const { roomId } = useParams();
@@ -18,21 +19,63 @@ const GamePage = () => {
   const [optionSquares, setOptionSquares] = useState({});
   const [playerSide, setPlayerSide] = useState("white");
   const [mateSquare, setMateSquare] = useState({});
-  const [gameOverMessage, setGameOverMessage] = useState();
+  const [gameOverMessage, setGameOverMessage] = useState("");
 
   const [whiteTime, setWhiteTime] = useState(600);
   const [blackTime, setBlackTime] = useState(600);
   const timer = useRef(null);
+  const timer2 = useRef(null);
+  const [timerInterval, setTimerInterval] = useState(1000);
   const [turnColor, setTurnColor] = useState("");
 
   useEffect(() => {
-    socket.emit("join-room", roomId);
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8080/api/game/" + roomId + "/stats",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("accessToken"),
+      },
+    };
+
+    axios
+      .request(config)
+      .then(() => {
+        socket.emit("join-room", roomId);
+      })
+      .catch(function (error) {
+        console.log(error);
+        switch (error.response.status) {
+          case 403:
+            window.location.href = "../../";
+            alert("Not allowed to join an ongoing match");
+            break;
+          default:
+            break;
+        }
+      });
 
     socket.on("room-stats", (full) => {
       setRoomFull(full);
     });
 
     socket.on("side", (side) => {
+      let timeId = roomId.charAt(0) + roomId.charAt(1);
+      let time;
+      switch (timeId) {
+        case "1B":
+          time = 60;
+          break;
+        case "3B":
+          time = 360;
+          break;
+        default:
+          time = 600;
+          break;
+      }
+      setWhiteTime(time);
+      setBlackTime(time);
       setPlayerSide(side);
     });
 
@@ -42,7 +85,9 @@ const GamePage = () => {
       setOptionSquares({});
     });
 
-    socket.on("match-end", (fen) => {
+    socket.on("match-mate", (fen) => {
+      clearInterval(timer.current);
+      clearInterval(timer2.current);
       setGame(new Chess(fen));
       setMoveFrom("");
       setOptionSquares({});
@@ -62,6 +107,22 @@ const GamePage = () => {
             ? undefined
             : { backgroundColor: color, borderRadius: "50%" },
       });
+      setTimerInterval(999999999999999);
+    });
+
+    socket.on("match-draw", (fen) => {
+      clearInterval(timer.current);
+      clearInterval(timer2.current);
+      setGame(new Chess(fen));
+      setMoveFrom("");
+      setOptionSquares({});
+      setGameOverMessage("Draw by stalemate");
+      setTimerInterval(999999999999999);
+    });
+
+    socket.on("match-time", (fen) => {
+      setOptionSquares({});
+      setGameOverMessage("You lost by time!");
     });
 
     socket.on("match-abort", () => {
@@ -79,23 +140,30 @@ const GamePage = () => {
       if (game.turn() === "w") {
         timer.current = setInterval(() => {
           setWhiteTime((time) => time - 1);
-        }, 1000);
+        }, timerInterval);
       } else {
-        timer.current = setInterval(() => {
+        timer2.current = setInterval(() => {
           setBlackTime((time) => time - 1);
-        }, 1000);
+        }, timerInterval);
       }
     }
-    return () => clearInterval(timer.current);
+    return () => {
+      clearInterval(timer.current);
+      clearInterval(timer2.current);
+    };
   }, [game]);
 
   useEffect(() => {
+    if (whiteTime === 0 || blackTime === 0) {
+      clearInterval(timer.current);
+      clearInterval(timer2.current);
+    }
     if (whiteTime === 0 && playerSide === "black") {
-      clearInterval(timer.current);
-      socket.emit("match-end", roomId + ";" + game.fen());
+      socket.emit("match-time", roomId + ";" + game.fen());
+      setGameOverMessage("You won by time!");
     } else if (blackTime === 0 && playerSide === "white") {
-      socket.emit("match-end", roomId + ";" + game.fen());
-      clearInterval(timer.current);
+      socket.emit("match-time", roomId + ";" + game.fen());
+      setGameOverMessage("You won by time!");
     }
   }, [whiteTime, blackTime]);
 
@@ -141,6 +209,8 @@ const GamePage = () => {
   function onSquareClick(square) {
     if (game.turn() !== playerSide[0]) {
       return;
+    } else if (gameOverMessage !== "") {
+      return;
     }
     setRightClickedSquares({});
 
@@ -164,21 +234,28 @@ const GamePage = () => {
         promotion: "q",
       });
       if (tempGame.isGameOver()) {
-        setGameOverMessage("You won by checkmate!");
-        socket.emit("match-end", roomId + ";" + tempGame.fen());
-        let side = "w";
-        if (game.turn() === "w") {
-          side = "b";
+        setTimerInterval(999999999999999);
+        if (tempGame.isCheckmate) {
+          setGameOverMessage("You won by checkmate!");
+          socket.emit("match-mate", roomId + ";" + tempGame.fen());
+          let side = "w";
+          if (game.turn() === "w") {
+            side = "b";
+          }
+          const kingPos = findKing(game, side);
+          const color = "rgba(255, 0, 0, 0.6)";
+          setMateSquare({
+            ...mateSquare,
+            [kingPos]:
+              mateSquare[kingPos] &&
+              mateSquare[kingPos].backgroundColor === color
+                ? undefined
+                : { backgroundColor: color, borderRadius: "50%" },
+          });
+        } else if (tempGame.isDraw()) {
+          setGameOverMessage("Draw by stalemate");
+          socket.emit("match-draw", roomId + ";" + tempGame.fen());
         }
-        const kingPos = findKing(game, side);
-        const color = "rgba(255, 0, 0, 0.6)";
-        setMateSquare({
-          ...mateSquare,
-          [kingPos]:
-            mateSquare[kingPos] && mateSquare[kingPos].backgroundColor === color
-              ? undefined
-              : { backgroundColor: color, borderRadius: "50%" },
-        });
       } else {
         socket.emit(
           "match-move",
@@ -227,89 +304,113 @@ const GamePage = () => {
     window.location.href = "../../";
   }
 
+  function getColor() {
+    if (localStorage.getItem("theme") === "dark") {
+      return "white";
+    }
+    return "black";
+  }
+
   return (
     <>
       {roomFull === false ? (
         <OnlineSearching />
       ) : (
-        <div className="bg-white dark:bg-gray-800 flex flex-col md:flex-row min-h-screen pt-16 justify-between px-16">
-          <div className="col-start-4 pb-20 flex flex-col justify-center items-start gap-64 text-3xl font-semibold">
-            <div
-              className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] w-2/5 p-6 rounded-lg flex flex-row justify-center items-center"
-              style={{ color: game.turn() === "b" ? "red" : "black" }}
-            >
-              <FontAwesomeIcon icon={faClock} />
-              {playerSide === 'black' ? (
-                <span className="ml-3">
-                {Math.floor(whiteTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :{(whiteTime % 60).toString().padStart(2, "0")}
-              </span>
+        <div className="dark:bg-gray-800 flex justify-center">
+          <div className="bg-white dark:bg-gray-800 w-full items-start xl:w-4/5 flex flex-col md:flex-row min-h-screen pt-16 justify-between px-16">
+            <div className="col-start-4 pt-8 flex flex-col justify-center items-center gap-32 xl:gap-56 text-2xl xl:text-3xl font-semibold">
+              {playerSide === "black" ? (
+                <div
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  style={{ color: game.turn() === "w" ? "red" : getColor() }}
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                  <span className="ml-3">
+                    {Math.floor(whiteTime / 60)
+                      .toString()
+                      .padStart(2, "0")}
+                    :{(whiteTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
               ) : (
-                <span className="ml-3">
-                {Math.floor(blackTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :{(blackTime % 60).toString().padStart(2, "0")}
-              </span>
+                <div
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  style={{ color: game.turn() === "b" ? "red" : getColor() }}
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                  <span className="ml-3">
+                    {Math.floor(blackTime / 60)
+                      .toString()
+                      .padStart(2, "0")}
+                    :{(blackTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
+              )}
+
+              {gameOverMessage && (
+                <div className="flex flex-col justify-center text-xl xl:text-2xl dark:text-white text-center">
+                  <div className="mb-2">{gameOverMessage}</div>
+                  <button
+                    onClick={backHome}
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm xl:text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Return to home
+                  </button>
+                </div>
+              )}
+
+              {playerSide === "white" ? (
+                <div
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  style={{ color: game.turn() === "w" ? "red" : getColor() }}
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                  <span className="ml-3">
+                    {Math.floor(whiteTime / 60)
+                      .toString()
+                      .padStart(2, "0")}
+                    :{(whiteTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
+              ) : (
+                <div
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] p-6 rounded-lg flex flex-row justify-center items-center"
+                  style={{ color: game.turn() === "b" ? "red" : getColor() }}
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                  <span className="ml-3">
+                    {Math.floor(blackTime / 60)
+                      .toString()
+                      .padStart(2, "0")}
+                    :{(blackTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
               )}
             </div>
-            <div
-              className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] w-2/5 p-6 rounded-lg flex flex-row justify-center items-center"
-              style={{ color: game.turn() === "w" ? "red" : "black" }}
-            >
-              <FontAwesomeIcon icon={faClock} />
-              {playerSide === 'white' ? (
-                <span className="ml-3">
-                {Math.floor(whiteTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :{(whiteTime % 60).toString().padStart(2, "0")}
-              </span>
-              ) : (
-                <span className="ml-3">
-                {Math.floor(blackTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :{(blackTime % 60).toString().padStart(2, "0")}
-              </span>
-              )} 
+
+            <div id="board" className="w-1/2 p-8 xl:w-3/5">
+              <Chessboard
+                id="ClickToMove"
+                boardOrientation={playerSide}
+                animationDuration={200}
+                arePiecesDraggable={false}
+                position={game.fen()}
+                onSquareClick={onSquareClick}
+                onSquareRightClick={onSquareRightClick}
+                customBoardStyle={{
+                  borderRadius: "4px",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+                }}
+                customSquareStyles={{
+                  ...optionSquares,
+                  ...rightClickedSquares,
+                  ...mateSquare,
+                }}
+              />
             </div>
-          </div>
-          {gameOverMessage && (
-            <div className="flex flex-col justify-center">
-              <div>{gameOverMessage}</div>
-              <button
-                onClick={backHome}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:hover:bg-gray-600"
-              >
-                Return to home
-              </button>
+            <div className="h-96 w-1/3">
+              <OnlineGameChat />
             </div>
-          )}
-          <div id="board" className="w-1/2 p-8 xl:w-2/5">
-            <Chessboard
-              id="ClickToMove"
-              boardOrientation={playerSide}
-              animationDuration={200}
-              arePiecesDraggable={false}
-              position={game.fen()}
-              onSquareClick={onSquareClick}
-              onSquareRightClick={onSquareRightClick}
-              customBoardStyle={{
-                borderRadius: "4px",
-                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
-              }}
-              customSquareStyles={{
-                ...optionSquares,
-                ...rightClickedSquares,
-                ...mateSquare,
-              }}
-            />
-          </div>
-          <div className="h-96 w-1/3">
-            <OnlineGameChat />
           </div>
         </div>
       )}
