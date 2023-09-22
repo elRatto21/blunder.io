@@ -1,0 +1,28 @@
+version: '3'
+services:
+  database:
+    image: blunder/database:latest
+    ports:
+      - "3306:3306"
+    env_file:
+      - mysql.env
+
+  backend:
+    image: blunder/backend:latest
+    ports:
+      - "8080:8080"
+      - "9092:9092"
+    env_file:
+      - spring.env
+    depends_on:
+      - database
+
+  # React Frontend Service
+  frontend:
+    image: blunder/frontend:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - react.env
+    links:
+      - backend
