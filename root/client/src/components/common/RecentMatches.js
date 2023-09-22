@@ -69,7 +69,7 @@ const RecentMatches = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-700 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-blue-600 dark:text-white">
           Recent Matches
@@ -86,6 +86,7 @@ const RecentMatches = () => {
           <thead className="text-left font-bold text-gray-500 dark:text-gray-300">
             <tr>
               <th className="pb-2">Date</th>
+              <th className="pb-2">Time</th>
               <th className="pb-2">Result</th>
               <th className="pb-2">Elo</th>
               <th className="pb-2">White</th>
@@ -96,6 +97,7 @@ const RecentMatches = () => {
             {matches.map((match) => (
               <tr key={match.matchId} className="text-gray-700 dark:text-gray-300">
                 <td className="py-2">{parseDate(match)}</td>
+                <td className="py-2">{match.time}</td>
                 <td className="py-2">
                   {match.winner === playerUsername ? (
                     <span className="text-green-600 font-semibold">Win</span>
