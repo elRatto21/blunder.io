@@ -22,7 +22,7 @@ public class SocketConfig {
 		com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
 		config.setHostname(host);
 		config.setPort(port);
-		config.setOrigin("http://localhost:3000");
+		config.setOrigin("*");
 		config.setAuthorizationListener(new SocketAuthorizationListener());
 		
 		return new SocketIOServer(config);
