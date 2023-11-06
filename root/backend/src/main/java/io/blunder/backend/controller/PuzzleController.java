@@ -19,14 +19,14 @@ public class PuzzleController {
 	@Autowired
 	private PuzzleService puzzleService;
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "*")
 	@GetMapping
 	public ResponseEntity<?> getRandomPuzzle() {
 		Puzzle puzzle = puzzleService.getRandomPuzzle();
 		return new ResponseEntity<>(puzzle, HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "*")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPuzzleById(@PathVariable String id) {
 		return new ResponseEntity<>(this.puzzleService.findById(id), HttpStatus.OK);

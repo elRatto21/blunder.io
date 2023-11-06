@@ -37,7 +37,7 @@ import io.blunder.backend.security.jwt.JwtUtils;
 import io.blunder.backend.security.service.UserDetailsImpl;
 import io.blunder.backend.service.UserInfoService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

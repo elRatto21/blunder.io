@@ -31,7 +31,7 @@ import io.blunder.backend.service.SocketService;
  * @author trappn
  *
  */
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/game")
 public class MatchController {
