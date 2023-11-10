@@ -16,7 +16,7 @@ const GameRooms = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/game/stats",
+      url: process.env.REACT_APP_API + "/api/game/stats",
       headers: {
         Authorization:
           "Bearer " + localStorage.getItem("accessToken"),

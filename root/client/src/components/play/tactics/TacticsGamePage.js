@@ -20,7 +20,7 @@ function TacticsGamePage() {
   const [showReset, setShowReset] = useState(false);
 
   const fetchPuzzle = async () => {
-    const url = "http://localhost:8080/api/puzzle";
+    const url = process.env.REACT_APP_API + "/api/puzzle";
 
     let accessToken = "Bearer " + localStorage.getItem("accessToken");
     let config = {

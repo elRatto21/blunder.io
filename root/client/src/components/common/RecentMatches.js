@@ -15,7 +15,7 @@ const RecentMatches = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/game/matches/" + playerUsername,
+      url: process.env.REACT_APP_API + "/api/game/matches/" + playerUsername,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },

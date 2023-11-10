@@ -32,7 +32,7 @@ const GamePage = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/game/" + roomId + "/stats",
+      url: process.env.REACT_APP_API + "/api/game/" + roomId + "/stats",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("accessToken"),

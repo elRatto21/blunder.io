@@ -9,7 +9,7 @@ function OnlinePlayButton() {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'http://localhost:8080/api/game/join/' + timeInput.charAt(0).toUpperCase() + timeInput.slice(1),
+      url: process.env.REACT_APP_API + "/api/game/join/" + timeInput.charAt(0).toUpperCase() + timeInput.slice(1),
       headers: { 
         'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
       }
