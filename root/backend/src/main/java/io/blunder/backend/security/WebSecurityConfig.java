@@ -58,7 +58,7 @@ public class WebSecurityConfig {
         .cors().and()
         .csrf().disable()
         .authorizeRequests()
-            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/auth/**", "/socket.io/**").permitAll()
             .anyRequest().authenticated()
             .and()
         .exceptionHandling()
