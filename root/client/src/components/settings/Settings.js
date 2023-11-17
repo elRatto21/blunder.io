@@ -15,7 +15,6 @@ const SettingsPage = () => {
 
     const logout = () => {
         localStorage.removeItem("accessToken")
-
         toast.success("See you next time 🥺", {
             position: "top-center",
             autoClose: 1500,
@@ -23,9 +22,8 @@ const SettingsPage = () => {
             closeOnClick: true,
             pauseOnHover: false,
             draggable: false,
-            theme: "light",
+            theme: localStorage.getItem("theme"),
           });
-
         navigate("/auth/login")
     }
 
