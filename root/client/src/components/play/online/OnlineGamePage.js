@@ -9,6 +9,8 @@ import OnlineGameChat from "../online/OnlineGameChat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const GamePage = () => {
   const { roomId } = useParams();
@@ -28,6 +30,8 @@ const GamePage = () => {
   const [timerInterval, setTimerInterval] = useState(1000);
   const [turnColor, setTurnColor] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     let config = {
       method: "get",
@@ -45,11 +49,34 @@ const GamePage = () => {
         socket.emit("join-room", roomId);
       })
       .catch(function (error) {
-        console.log(error);
         switch (error.response.status) {
           case 403:
-            window.location.href = "../../";
-            alert("Not allowed to join an ongoing match");
+            toast.warn("Not allowed to join an ongoing match.", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored"
+            });
+            setTimeout(() => {
+              navigate("/online")
+            }, 2000);
+            break;
+          case 401:
+            toast.warn("There is no match with this id.", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            })
+            setTimeout(() => {
+              navigate("/online")
+            }, 2000);
             break;
           default:
             break;
@@ -126,10 +153,18 @@ const GamePage = () => {
     });
 
     socket.on("match-abort", () => {
-      alert("Player disconnected. Aborting match");
+      toast.warn("Player disconnected, aborting match", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
       setTimeout(() => {
-        window.location.href = "/online";
-      }, 2000);
+        navigate("/online")
+      }, 3000);
     });
   }, [roomId]);
 
