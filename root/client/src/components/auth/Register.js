@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     let data = JSON.stringify({
@@ -28,15 +30,40 @@ const Register = () => {
     axios
       .request(config)
       .then((response) => {
-        window.location.href = "/auth/login";
+        toast.success("Successfully registered!", {
+          position: "top-center",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          theme: localStorage.getItem("theme"),
+        });
+        navigate("/auth/login")
       })
       .catch((error) => {
         switch (error.response.status) {
           case 409:
-            setErrorMessage("Username/Email already registered");
+            toast.error("Username or Email is already registered.", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            })
             break;
           default:
-            alert("👽");
+            toast.error("An error has occured. Please try again", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            })
             break;
         }
       });
@@ -140,14 +167,6 @@ const Register = () => {
               </div>
             </div>
           </div>
-
-          {errorMessage !== "" && (
-            <div className="flex justify-center">
-              <div className="w-2/3 font-semibold bg-red-500 text-gray-50 p-2 rounded-lg text-center">
-                <div>{errorMessage}</div>
-              </div>
-            </div>
-          )}
 
           <div className="flex items-center justify-between">
             <div className="text-sm">

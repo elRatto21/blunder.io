@@ -2,9 +2,12 @@ import React, { useContext } from 'react';
 import { ThemeContext } from '../common/ThemeProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun, faUser } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const SettingsPage = () => {
     const { theme, setTheme } = useContext(ThemeContext);
+    const navigate = useNavigate();
 
     const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -12,7 +15,16 @@ const SettingsPage = () => {
 
     const logout = () => {
         localStorage.removeItem("accessToken")
-        window.location.href = "/auth/login"
+        toast.info("Logged out successfully 😔", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: localStorage.getItem("theme"),
+          });
+        navigate("/auth/login")
     }
 
     return (
