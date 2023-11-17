@@ -35,25 +35,34 @@ const Login = () => {
         .request(config)
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
-
-          toast.success("Successfully logged in!", {
-            position: "top-center",
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            theme: localStorage.getItem("theme"),
-          });
-
-          //setLoggedIn(true);
           navigate("/")
         })
         .catch(function (error) {
-          if (error.response.status === 404) {
-            setErrorMessage("Wrong username or password!");
-            setUsername("");
-            setPassword("");
+          try {
+            if (error.response.status === 404) {
+              toast.error("Wrong username or password", {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: localStorage.getItem("theme"),
+              });
+              setErrorMessage("Wrong username or password!");
+              setUsername("");
+              setPassword("");
+            }
+          } catch (error) {
+            toast.error("Server not reachable. Please contact us at info@blunderio.xyz", {
+              position: "top-center",
+              autoClose: 15000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: localStorage.getItem("theme")
+            });
           }
         });
     }
