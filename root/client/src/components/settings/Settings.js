@@ -15,7 +15,7 @@ const SettingsPage = () => {
 
     const logout = () => {
         localStorage.removeItem("accessToken")
-        toast.success("See you next time 🥺", {
+        toast.info("Logged out successfully 😔", {
             position: "top-center",
             autoClose: 1500,
             hideProgressBar: false,
