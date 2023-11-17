@@ -1,14 +1,13 @@
 name: Bug Report
 description: File a bug report
-title: "[Bug]: "
+title: "Bug 🪲: "
 labels: ["bug"]
-projects: ["elRatto21/blunder.io"]
 assignees:
   - elRatto21
 body:
   - type: markdown
     attributes:
-      value: |
+      value:
         Thanks for taking the time to fill out this bug report!
   - type: input
     id: contact
@@ -22,14 +21,7 @@ body:
     id: what-happened
     attributes:
       label: What happened exactly?
-      placeholder: Tell us what you see!
-    validations:
-      required: true
-  - type: textarea
-    id: expected-outcome
-    attributes:
-      label: What was the expected outcome?
-      placeholder: Tell us what you wanted to do!
+      placeholder: Tell us what you wanted to do and what actually happened!
     validations:
       required: true
   - type: dropdown
@@ -47,5 +39,5 @@ body:
     id: logs
     attributes:
       label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      description: Please copy and paste any relevant log output if existing. This will be automatically formatted into code, so no need for backticks.
       render: shell
