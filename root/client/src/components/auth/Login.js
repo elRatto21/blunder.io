@@ -41,7 +41,7 @@ const Login = () => {
         .request(config)
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
-          navigate("/");
+          window.location.href = "/"
         })
         .catch(function (error) {
           try {
