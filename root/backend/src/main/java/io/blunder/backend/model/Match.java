@@ -5,6 +5,7 @@ import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity(name = "game_match")
@@ -28,6 +29,7 @@ public class Match {
 	
 	private String time;
 	
+	@Lob
 	private ArrayList<String> moves;
 	
 	private String date;
