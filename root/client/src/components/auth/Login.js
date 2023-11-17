@@ -8,15 +8,21 @@ import axios from "axios";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     if (username === "" || password === "") {
-      setErrorMessage("Inputs can't be empty");
+      toast.error("Inputs can't be empty", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
     } else {
-      setErrorMessage("");
       let data = JSON.stringify({
         username: username,
         password: password,
@@ -35,7 +41,7 @@ const Login = () => {
         .request(config)
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
-          navigate("/")
+          navigate("/");
         })
         .catch(function (error) {
           try {
@@ -47,22 +53,24 @@ const Login = () => {
                 closeOnClick: true,
                 pauseOnHover: false,
                 draggable: false,
-                theme: localStorage.getItem("theme"),
+                theme: "colored",
               });
-              setErrorMessage("Wrong username or password!");
               setUsername("");
               setPassword("");
             }
           } catch (error) {
-            toast.error("Server not reachable. Please contact us at info@blunderio.xyz", {
-              position: "top-center",
-              autoClose: 15000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: false,
-              theme: localStorage.getItem("theme")
-            });
+            toast.error(
+              "Server not reachable. Please contact us at info@blunderio.xyz",
+              {
+                position: "top-center",
+                autoClose: 15000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: localStorage.getItem("theme"),
+              }
+            );
           }
         });
     }
@@ -138,14 +146,6 @@ const Login = () => {
               </div>
             </div>
           </div>
-
-          {errorMessage !== "" && (
-            <div className="flex justify-center">
-              <div className="w-1/2 font-semibold bg-red-500 text-gray-50 p-2 rounded-lg text-center">
-                <div>{errorMessage}</div>
-              </div>
-            </div>
-          )}
           <div className="flex items-center justify-between">
             <div className="text-sm">
               <a
