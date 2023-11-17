@@ -9,7 +9,6 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -45,10 +44,26 @@ const Register = () => {
       .catch((error) => {
         switch (error.response.status) {
           case 409:
-            setErrorMessage("Username/Email already registered");
+            toast.error("Username or Email is already registered.", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            })
             break;
           default:
-            alert("👽");
+            toast.error("An error has occured. Please try again", {
+              position: "top-center",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+            })
             break;
         }
       });
@@ -152,14 +167,6 @@ const Register = () => {
               </div>
             </div>
           </div>
-
-          {errorMessage !== "" && (
-            <div className="flex justify-center">
-              <div className="w-2/3 font-semibold bg-red-500 text-gray-50 p-2 rounded-lg text-center">
-                <div>{errorMessage}</div>
-              </div>
-            </div>
-          )}
 
           <div className="flex items-center justify-between">
             <div className="text-sm">
