@@ -16,7 +16,7 @@ public class SocketAuthorizationListener implements AuthorizationListener {
 	@Override
 	public boolean isAuthorized(HandshakeData data) {
 		String token = data.getSingleUrlParam("accessToken");
-		if (isValid(token) && isLocalhost(data)) {
+		if (isValid(token)) {
 			return true;
 		} else {
 			return false;
@@ -35,10 +35,5 @@ public class SocketAuthorizationListener implements AuthorizationListener {
 		}
 
 		return false;
-	}
-
-	public boolean isLocalhost(HandshakeData data) {
-		String remoteAddress = data.getAddress().getHostString();
-		return "192.168.32.1".equals(remoteAddress);
 	}
 }

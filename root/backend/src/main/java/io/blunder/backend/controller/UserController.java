@@ -25,7 +25,7 @@ import io.blunder.backend.service.UserInfoService;
  * @author trappn
  *
  */
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

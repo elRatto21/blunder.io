@@ -21,7 +21,7 @@ const Login = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "http://localhost:8080/api/auth/signin",
+        url: process.env.REACT_APP_API + "/api/auth/signin",
         headers: {
           "Content-Type": "application/json",
         },

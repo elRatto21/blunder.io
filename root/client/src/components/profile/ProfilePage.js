@@ -17,7 +17,7 @@ const ProfilePage = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/user/" + playerUsername,
+      url: process.env.REACT_APP_API + "/api/user/" + playerUsername,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },
