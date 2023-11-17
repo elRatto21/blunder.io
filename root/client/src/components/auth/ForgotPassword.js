@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        toast.success("Follow the link in the email to reset your password!", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: localStorage.getItem("theme"),
+          });
+          navigate("/auth/login")
     };
 
     return (
