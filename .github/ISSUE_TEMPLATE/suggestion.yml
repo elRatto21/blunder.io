@@ -1,0 +1,27 @@
+name: Suggestion
+description: Suggest changes!
+title: "Suggestion: "
+labels: ["suggestion"]
+assignees:
+  - elRatto21
+body:
+  - type: markdown
+    attributes:
+      value:
+        Thanks for taking the time to fill out this suggestion form!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: What is your suggestion?
+      placeholder: Tell us what you would change on blunder.io! (Design, layout, etc.)
+    validations:
+      required: true
+      
