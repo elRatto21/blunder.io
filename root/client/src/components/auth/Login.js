@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     if (username === "" || password === "") {
@@ -30,9 +34,20 @@ const Login = () => {
       axios
         .request(config)
         .then((response) => {
-          localStorage.removeItem("accessToken");
           localStorage.setItem("accessToken", response.data.accessToken);
-          window.location.href = "/";
+
+          toast.success("Successfully logged in!", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: localStorage.getItem("theme"),
+          });
+
+          //setLoggedIn(true);
+          navigate("/")
         })
         .catch(function (error) {
           if (error.response.status === 404) {
