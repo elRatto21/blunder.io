@@ -9,7 +9,7 @@ ENV SOCKETIO_HOST=localhost
 ENV SOCKETIO_PORT=9092
 ENV SECRET_KEY=default
 
-COPY target/backend.jar .
+COPY target/backend-1.0.0-SNAPSHOT.jar .
 
 EXPOSE 8080
 EXPOSE 9092
