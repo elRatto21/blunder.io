@@ -88,6 +88,7 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		LOG.info("Tried to register user with: username={} email={}", signUpRequest.getUsername(), signUpRequest.getEmail());
 		try {
 			if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 				return new ResponseEntity<String>("Username is already in use", HttpStatus.CONFLICT);
