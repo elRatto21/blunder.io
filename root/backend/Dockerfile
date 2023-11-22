@@ -14,4 +14,4 @@ COPY target/backend.jar .
 EXPOSE 8080
 EXPOSE 9092
 
-CMD ["java", "-jar", "backend.jar"]
+CMD ["java", "-jar", "backend-1.0.0-SNAPSHOT.jar"]
