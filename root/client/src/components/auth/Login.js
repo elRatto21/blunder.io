@@ -20,6 +20,53 @@ const Login = () => {
         draggable: false,
         theme: "colored",
       });
+    } else if (username.length < 3) {
+      toast.error("Username has to be at least 3 characters long.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
+    } else if (password.length < 6) {
+      toast.error("Password has to be at least 6 characters long.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setPassword("");
+    } else if (username.length > 20) {
+      toast.error("Username can't be longer than 20 characters.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
+    } else if (password.length > 40) {
+      toast.error("Password can't be longer than 40 characters.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
     } else {
       let data = JSON.stringify({
         username: username,
@@ -39,7 +86,7 @@ const Login = () => {
         .request(config)
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
-          window.location.href = "/"
+          window.location.href = "/";
         })
         .catch(function (error) {
           try {
@@ -109,6 +156,8 @@ const Login = () => {
                   type="username"
                   autoComplete="username"
                   required
+                  minLength={3}
+                  maxLength={20}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-700 rounded-md py-2"
@@ -136,6 +185,8 @@ const Login = () => {
                   type="password"
                   autoComplete="current-password"
                   required
+                  minLength={6}
+                  maxLength={40}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-400 dark:border-slate-700 rounded-md py-2"

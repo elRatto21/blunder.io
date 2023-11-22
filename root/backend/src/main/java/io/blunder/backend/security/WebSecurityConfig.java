@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
+	@SuppressWarnings({ "removal", "deprecation" })
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
