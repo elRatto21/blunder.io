@@ -21,52 +21,111 @@ const Register = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: process.env.REACT_APP_API + "/api/auth/signup",
+      url: "http://localhost:8080/api/auth/signup",
       headers: {
         "Content-Type": "application/json",
       },
       data: data,
     };
-    axios
-      .request(config)
-      .then((response) => {
-        toast.success("Successfully registered!", {
-          position: "top-center",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          theme: localStorage.getItem("theme"),
-        });
-        navigate("/auth/login")
-      })
-      .catch((error) => {
-        switch (error.response.status) {
-          case 409:
-            toast.error("Username or Email is already registered.", {
-              position: "top-center",
-              autoClose: 2500,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: false,
-              theme: "colored",
-            })
-            break;
-          default:
-            toast.error("An error has occured. Please try again", {
-              position: "top-center",
-              autoClose: 2500,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: false,
-              theme: "colored",
-            })
-            break;
-        }
+    if (username === "" || password === "") {
+      toast.error("Inputs can't be empty", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
       });
+    } else if (username.length < 3) {
+      toast.error("Username has to be at least 3 characters long.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
+    } else if (password.length < 6) {
+      toast.error("Password has to be at least 6 characters long.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setPassword("");
+    } else if (username.length > 20) {
+      toast.error("Username can't be longer than 20 characters.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
+    } else if (password.length > 40) {
+      toast.error("Password can't be longer than 40 characters.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+      });
+      setUsername("");
+      setPassword("");
+    } else {
+      axios
+        .request(config)
+        .then((response) => {
+          toast.success("Successfully registered!", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            theme: localStorage.getItem("theme"),
+          });
+          navigate("/auth/login");
+        })
+        .catch((error) => {
+          switch (error.response.status) {
+            case 409:
+              toast.error("Username or Email is already registered.", {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+              });
+              break;
+            default:
+              toast.error("An error has occured. Please try again", {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+              });
+              break;
+          }
+        });
+    }
 
     e.preventDefault();
   };
