@@ -2,3 +2,4 @@
 .gitattributes
 root/client/.env
 *.env
+*.p12
