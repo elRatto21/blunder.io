@@ -21,7 +21,7 @@ const Register = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/auth/signup",
+      url: process.env.REACT_APP_API + "/api/auth/signup",
       headers: {
         "Content-Type": "application/json",
       },
