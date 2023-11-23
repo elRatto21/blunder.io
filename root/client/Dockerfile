@@ -1,4 +1,4 @@
-FROM node:17
+FROM node:21
 
 WORKDIR /app
 
@@ -12,4 +12,4 @@ EXPOSE 3000
 
 RUN npm run build
 
-RUN serve -s build
+CMD ["npx", "serve", "-s", "build"]

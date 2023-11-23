@@ -22,7 +22,5 @@ services:
     image: blunder/frontend:latest
     ports:
       - "3000:3000"
-    env_file:
-      - react.env
     links:
       - backend
