@@ -58,8 +58,6 @@ public class WebSecurityConfig {
 		http
         .cors().and()
         .csrf().disable()
-		.requiresChannel(channel ->
-			channel.anyRequest().requiresSecure())
         .authorizeRequests()
             .requestMatchers("/api/auth/**", "/socket.io/**").permitAll()
             .anyRequest().authenticated()
