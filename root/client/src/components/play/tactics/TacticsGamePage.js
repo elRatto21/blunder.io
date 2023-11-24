@@ -10,6 +10,7 @@ function TacticsGamePage() {
   const [moveIndex, setMoveIndex] = useState(0);
   const [game, setGame] = useState(null);
   const [completed, setCompleted] = useState(false);
+  const [solved, setSolved] = useState(false);
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
@@ -42,6 +43,7 @@ function TacticsGamePage() {
       setSuccessMessage("Your turn");
       setRightClickedSquares({});
       setTries(0);
+      setSolved(false);
       console.log(response.data);
 
       if (puzzle.fen.split(" ")[1] === "w") {
@@ -186,20 +188,23 @@ function TacticsGamePage() {
           if (moveIndex === moves.length - 1) {
             setFen(game.fen());
             setCompleted(true);
+            setSolved(true);
             setSuccessMessage("Puzzle solved!");
-            socket.emit("puzzle-win", puzzleData.id);
-            console.log("puzzle win");
+            let elo = Math.floor(puzzleData.rating / 200);
+            if(tries === 0) {
+              socket.emit("puzzle-finish", elo);
+            }
           }
         } else {
           setRightClickedSquares({
             ...rightClickedSquares,
             [square]: { backgroundColor: "rgba(255, 0, 0, 0.75)" },
           });
-          setSuccessMessage("Wrong move.");
+          setSuccessMessage("Wrong move");
           setTries((prevTries) => prevTries + 1);
-          if (tries === 0 && !completed) {
-            socket.emit("puzzle-loose", puzzleData.id);
-            console.log("puzzle loose");
+          if (tries === 0 && !solved) {
+            let elo = Math.floor((-20) + puzzleData.rating / 150);
+            socket.emit("puzzle-finish", elo);
           }
           setShowReset(true);
         }
@@ -248,20 +253,23 @@ function TacticsGamePage() {
       </div>
 
       <div className="col-start-4 w-full h-full flex flex-col justify-center items-star">
-        <div className="w-2/3 h-1/4 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] gap-6 flex dark:bg-gray-700 dark:text-white justify-center items-center flex-col rounded-lg">
+        <div className="w-2/3 h-fit p-5 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] gap-6 flex dark:bg-gray-700 dark:text-white justify-center items-center flex-col rounded-lg">
           <div className="text-2xl font-bold">{successMessage}</div>
           {completed || showReset ? (
             <div className="flex justify-center flex-col w-full items-center gap-4">
-              {completed ? (
-                <span className="text-green-700 font-semibold">
-                  +{Math.floor(puzzleData.rating / 200)} ELO
-                </span>
-              ) : (
-                <span className="text-red-700 font-semibold">
-                  -{Math.floor((15 - puzzleData.rating / 150)).toString()} Elo
-                </span>
-              )}
-
+              {tries === 1 ? (
+                <div>
+                  {completed ? (
+                  <span className="text-green-700 font-semibold">
+                    +{Math.floor(puzzleData.rating / 200)} ELO
+                  </span>
+                ) : (
+                  <span className="text-red-700 font-semibold">
+                    {Math.floor((-20 + puzzleData.rating / 150)).toString()} Elo
+                  </span>
+                )}
+                </div>
+              ) : null}
               <button
                 onClick={resetPuzzle}
                 className="w-3/4 py-2 px-4 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-70 active:bg-blue-800"

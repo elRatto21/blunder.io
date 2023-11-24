@@ -357,23 +357,12 @@ public class SocketService implements InitializingBean {
 			LOG.info("Match finished");
 		});
 		
-		socketIoServer.addEventListener("puzzle-win", String.class, (client, payload, ackRequest) -> {
-			String puzzleId = payload;
-			Puzzle puzzle = this.puzzleService.findById(puzzleId);
+		socketIoServer.addEventListener("puzzle-finish", String.class, (client, payload, ackRequest) -> {
+			int elo = Integer.parseInt(payload);
 			String username = playersBySessionId.get(client.getSessionId());
 			UserInfo userInfo = this.userInfoService.getUserByUsername(username).orElseThrow();
 			
-			userInfo.setPuzzleElo(userInfo.getPuzzleElo() + Long.valueOf(puzzle.getRating() / 200).intValue());
-			this.userInfoService.save(userInfo);
-		});
-		
-		socketIoServer.addEventListener("puzzle-loose", String.class, (client, payload, ackRequest) -> {
-			String puzzleId = payload;
-			Puzzle puzzle = this.puzzleService.findById(puzzleId);
-			String username = playersBySessionId.get(client.getSessionId());
-			UserInfo userInfo = this.userInfoService.getUserByUsername(username).orElseThrow();
-			
-			userInfo.setPuzzleElo(userInfo.getPuzzleElo() - (15 - Long.valueOf(puzzle.getRating() / 150).intValue()));
+			userInfo.setPuzzleElo(userInfo.getPuzzleElo() + elo);
 			this.userInfoService.save(userInfo);
 		});
 		
