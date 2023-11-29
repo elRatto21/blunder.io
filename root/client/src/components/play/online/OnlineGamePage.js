@@ -134,7 +134,7 @@ const GamePage = () => {
             ? undefined
             : { backgroundColor: color, borderRadius: "50%" },
       });
-      setTimerInterval(999999999999999);
+      setTimerInterval(999999999);
     });
 
     socket.on("match-draw", (fen) => {
@@ -144,7 +144,7 @@ const GamePage = () => {
       setMoveFrom("");
       setOptionSquares({});
       setGameOverMessage("Draw by stalemate");
-      setTimerInterval(999999999999999);
+      setTimerInterval(999999999);
     });
 
     socket.on("match-time", (fen) => {
@@ -269,7 +269,7 @@ const GamePage = () => {
         promotion: "q",
       });
       if (tempGame.isGameOver()) {
-        setTimerInterval(999999999999999);
+        setTimerInterval(9999999999);
         if (tempGame.isCheckmate) {
           setGameOverMessage("You won by checkmate!");
           socket.emit("match-mate", roomId + ";" + tempGame.fen());

@@ -18,7 +18,9 @@ const ForgotPassword = () => {
             draggable: false,
             theme: localStorage.getItem("theme"),
           });
-          navigate("/auth/login")
+          setTimeout(() => {
+            navigate("/auth/login")
+          }, 1000)
     };
 
     return (
