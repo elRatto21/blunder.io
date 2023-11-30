@@ -25,7 +25,7 @@ const FriendCard = ({username, online, onShowChallenge, onRemove}) => {
                     <div className="text-red-500 mb-2">offline</div>
                 )}
                 <div className="flex flex-row items-center justify-center gap-2 w-3/4 rounded-md">
-                    <button className="bg-blue-300 rounded-md p-0.5 pl-2 pr-2" onClick={() => handleChat}><FontAwesomeIcon icon={faComments} /></button>
+                    <button className="bg-blue-300 rounded-md p-0.5 pl-2 pr-2" onClick={handleChat}><FontAwesomeIcon icon={faComments} /></button>
                     <button className="bg-green-300 rounded-md p-0.5 pl-2 pr-2" onClick={() => onShowChallenge(username)}><FontAwesomeIcon icon={faChess} /></button>
                     <button className="bg-red-300 rounded-md p-0.5 pl-2 pr-2" onClick={() => onRemove(username)}><FontAwesomeIcon icon={faUserMinus} /></button>           
                 </div>
