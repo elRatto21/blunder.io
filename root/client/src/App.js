@@ -19,7 +19,7 @@ import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons";
 import UnderConstruction from "./components/common/UnderConstruction";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import FriendList from "./components/friends/FriendList";
+import FriendPage from "./components/friends/FriendPage";
 
 library.add(faUserGroup, faPuzzlePiece);
 
@@ -61,7 +61,7 @@ const App = () => {
               <Route path="profile" element={<ProfilePage />} />
               <Route path="settings" element={<Settings />} />
 
-              <Route path="friends" element={<FriendList />} />
+              <Route path="friends" element={<FriendPage />} />
               <Route path="shop" element={<UnderConstruction />} />
 
               <Route path="*" element={<NotFound />} />
