@@ -1,5 +1,8 @@
 package io.blunder.backend.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Role {
 	
 	@Id

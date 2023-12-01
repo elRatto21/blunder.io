@@ -2,12 +2,19 @@ package io.blunder.backend.model;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class UserInfo {
 
 	@Id
@@ -35,7 +42,10 @@ public class UserInfo {
 	
 	private int draws;
 
-	private List<String> friends;
+	@Lob
+	@ElementCollection
+    @Embedded
+	private List<Friend> friends;
 
 	public String getUsername() {
 		return username;
@@ -93,11 +103,11 @@ public class UserInfo {
 		this.puzzleElo = puzzleElo;
 	}
 
-	public List<String> getFriends() {
+	public List<Friend> getFriends() {
 		return friends;
 	}
 
-	public void setFriends(List<String> friends) {
+	public void setFriends(List<Friend> friends) {
 		this.friends = friends;
 	}
 

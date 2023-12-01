@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import io.blunder.backend.model.UserInfo;
 import io.blunder.backend.repository.UserInfoRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserInfoService {
@@ -18,6 +19,7 @@ public class UserInfoService {
 		return userRepo.findByUsername(username);
 	}
 	
+	@Transactional
 	public UserInfo save(UserInfo userDetails) {
 		return userRepo.save(userDetails);
 	}

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.blunder.backend.model.ERole;
+import io.blunder.backend.model.Friend;
 import io.blunder.backend.model.Role;
 import io.blunder.backend.model.User;
 import io.blunder.backend.model.UserInfo;
@@ -120,7 +121,7 @@ public class AuthController {
 			userInfo.setWins(0);
 			userInfo.setLosses(0);
 			userInfo.setDraws(0);
-			userInfo.setFriends(new ArrayList<String>());
+			userInfo.setFriends(new ArrayList<Friend>());
 			userDetailsService.save(userInfo);
 			
 			LOG.info(String.format("User with id %s registered", user.getId()));
