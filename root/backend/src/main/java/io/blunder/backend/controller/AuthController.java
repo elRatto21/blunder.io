@@ -91,12 +91,16 @@ public class AuthController {
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		LOG.info("Tried to register user with: username={} email={}", signUpRequest.getUsername(), signUpRequest.getEmail());
 		try {
-			if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-				return new ResponseEntity<String>("Username is already in use", HttpStatus.CONFLICT);
-			}
 
-			if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-				return new ResponseEntity<String>("Email is already in use", HttpStatus.CONFLICT);
+			List<User> existingUsers = userRepository.findAll();
+			
+			for(User u : existingUsers) {
+				if(signUpRequest.getUsername().toLowerCase().equals(u.getUsername().toLowerCase())) {
+					return new ResponseEntity<String>("Username is already in use", HttpStatus.CONFLICT);
+				}
+				if(signUpRequest.getEmail().toLowerCase().equals(u.getEmail().toLowerCase())) {
+					return new ResponseEntity<String>("Email is already in use", HttpStatus.CONFLICT);
+				}
 			}
 
 			User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
