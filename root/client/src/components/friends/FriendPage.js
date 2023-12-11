@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBolt, faBomb, faClock, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { playerUsername } from "../../services/auth";
+import { useNavigate } from "react-router-dom";
 
 const FriendPage = () => {
     const [friendName, setFriendName] = useState("");
@@ -14,16 +15,19 @@ const FriendPage = () => {
     const [showChallenge, setShowChallenge] = useState(false)
     const [selectedMode, setSelectedMode] = useState(null)
     const [friends, setFriends] = useState([]);
+    const [friendRequests, setFriendRequests] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         getFriends();
+        getFriendRequests();
       }, []);
 
       const getFriends = () => {
         let config = {
           method: "get",
           maxBodyLength: Infinity,
-          url: process.env.REACT_APP_API + "/api/friends" + playerUsername,
+          url: process.env.REACT_APP_API + "/api/friends?username=" + playerUsername,
           headers: {
             Authorization: "Bearer " + localStorage.getItem("accessToken"),
           },
@@ -37,6 +41,25 @@ const FriendPage = () => {
           .catch((error) => {
           });
       };
+
+      const getFriendRequests = () => {
+        let config = {
+            method: "get",
+            maxBodyLength: Infinity,
+            url: process.env.REACT_APP_API + "/api/friends/requests?username=" + playerUsername,
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("accessToken"),
+            },
+          };
+      
+          axios
+            .request(config)
+            .then((response) => {
+              setFriendRequests(response.data);
+            })
+            .catch((error) => {
+            });
+      }
 
     const ChallengeFriend = () => {
         function challenge() {
@@ -260,13 +283,14 @@ const FriendPage = () => {
 
     const AddFriendDialog = () => {
         function addFriend() {
-
+            let accessToken = "Bearer " + localStorage.getItem("accessToken");
             let config = {
                 method: "post",
                 maxBodyLength: Infinity,
-                url: process.env.REACT_APP_API + "/api/friends/add/" + addFriendName,
+                url: process.env.REACT_APP_API + "/api/friends?username=" + playerUsername + "&friendName=" + addFriendName,
                 headers: {
                   "Content-Type": "application/json",
+                  Authorization: accessToken
                 },
               };
               axios
@@ -274,18 +298,26 @@ const FriendPage = () => {
                 .then(() => {
                     toast.success('Friend request sent successfully')
                 })
-                .catch(function () {
-                    toast.error(
-                      "Server not reachable. Please contact us at info@blunderio.xyz",
-                      {
-                        position: "top-center",
-                        autoClose: 15000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: false,
-                        theme: localStorage.getItem("theme"),
-                  })
+                .catch(function (error) {
+                    try {
+                        if(error.response.status === 409) {
+                            toast.error('You are either already friends with this user or there is a pending friend request.',
+                            {autoClose: 10000}
+                            )
+                        }
+                    } catch (error) {
+                        toast.error(
+                        "Server not reachable. Please contact us at info@blunderio.xyz",
+                        {
+                            position: "top-center",
+                            autoClose: 15000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: false,
+                            theme: localStorage.getItem("theme"),
+                        })
+                    }
                 });
                 setAddFriendName("")
             setShowAddFriend(false)
@@ -334,12 +366,54 @@ const FriendPage = () => {
        ) 
     }
 
+    function acceptRequest(friendName) {
+        let config = {
+            method: "post",
+            maxBodyLength: Infinity,
+            url: process.env.REACT_APP_API + "/api/friends/request/accept?username=" + playerUsername + "&friendName=" + friendName,
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("accessToken"),
+            },
+          };
+      
+          axios
+            .request(config)
+            .then(() => {
+              navigate(0)
+              toast.success('Accepted ' + friendName + "'s request.")
+            })
+            .catch(() => {
+                toast.error('Error')
+            });
+    }
+
+    function rejectRequest(friendName) {
+        let config = {
+            method: "post",
+            maxBodyLength: Infinity,
+            url: process.env.REACT_APP_API + "/api/friends/request/decline?username=" + playerUsername + "&friendName=" + friendName,
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("accessToken"),
+            },
+          };
+      
+          axios
+            .request(config)
+            .then(() => {
+              navigate(0)
+              toast.success('Rejected ' + friendName + "'s request.")
+            })
+            .catch(() => {
+                toast.error('Error')
+            });
+    }
+
     return(
         <>
         {showRemove === true && <RemoveDialog />}
         {showAddFriend === true && <AddFriendDialog />}
         {showChallenge === true && <ChallengeFriend />}
-        <div className="mt-20">
+        <div className="mt-24">
             <div className="flex justify-center">
                 <div className="mb-8 w-2/3 items-center flex items font-semibold justify-between text-3xl">
                     <div>Your friends</div>
@@ -347,11 +421,21 @@ const FriendPage = () => {
                 </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center justify-center">
+                <div className="w-2/3 flex gap-8 flex-wrap mb-8">
+                    {friendRequests.map((request) => (
+                        <div className="p-3 shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-md">
+                        Request from <b>{request.username}</b> pending
+                        <button onClick={() => acceptRequest(request.username)} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white p-0.5 pl-1.5 pr-1.5 rounded-md">Accept</button>
+                        <button onClick={() => rejectRequest(request.username)} className="ml-2 bg-red-600 hover:bg-red-700 text-white p-0.5 pl-1.5 pr-1.5 rounded-md">Reject</button>
+                        </div>
+                    ))}
+                </div>
+
                 <div className="w-2/3 flex gap-8 flex-wrap">
-                {friends.map((friend) => (
-                    <FriendCard onShowChallenge={handleChallenge} onRemove={handleRemove} username={friend.name} online={friend.online} />
-                ))}
+                    {friends.map((friend) => (
+                        <FriendCard onShowChallenge={handleChallenge} onRemove={handleRemove} username={friend.username} online={friend.online} />
+                    ))}
                 </div>
             </div>
         </div>
