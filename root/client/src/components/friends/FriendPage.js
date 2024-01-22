@@ -383,7 +383,7 @@ const FriendPage = () => {
               toast.success('Accepted ' + friendName + "'s request.")
             })
             .catch(() => {
-                toast.error('Error')
+                navigate(0)
             });
     }
 
@@ -404,7 +404,7 @@ const FriendPage = () => {
               toast.success('Rejected ' + friendName + "'s request.")
             })
             .catch(() => {
-                toast.error('Error')
+                navigate(0)
             });
     }
 
@@ -434,7 +434,7 @@ const FriendPage = () => {
 
                 <div className="w-2/3 flex gap-8 flex-wrap">
                     {friends.map((friend) => (
-                        <FriendCard onShowChallenge={handleChallenge} onRemove={handleRemove} username={friend.username} online={friend.online} />
+                        <FriendCard onShowChallenge={handleChallenge} onRemove={() => rejectRequest(friend.username)} username={friend.username} online={friend.online} />
                     ))}
                 </div>
             </div>

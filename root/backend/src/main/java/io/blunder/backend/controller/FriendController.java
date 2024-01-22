@@ -69,7 +69,19 @@ public class FriendController {
 	}
 	
 	@PostMapping("/request/accept")
-	public ResponseEntity<?> acceptRequest(@RequestParam String username, @RequestParam String friendName) {
+	public ResponseEntity<?> acceptRequest(@RequestParam String username, @RequestParam String friendName, HttpServletRequest request) {
+		
+		String jwtToken = extractTokenFromRequest(request);
+		String nameFromToken = jwtUtils.getUserNameFromJwtToken(jwtToken);
+		
+		if(!username.equals(nameFromToken)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		if(username.equals(friendName)) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
 		UserInfo user = userInfoService.getUserByUsername(username).orElseThrow();
 		UserInfo friend = userInfoService.getUserByUsername(friendName).orElseThrow();
 		
@@ -98,6 +110,44 @@ public class FriendController {
 			}
 		}
 		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	@PostMapping("/request/decline") 
+	public ResponseEntity<?> declineRequest(@RequestParam String username, @RequestParam String friendName, HttpServletRequest request) {
+		String jwtToken = extractTokenFromRequest(request);
+		String nameFromToken = jwtUtils.getUserNameFromJwtToken(jwtToken);
+		
+		if(!username.equals(nameFromToken)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		if(username.equals(friendName)) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
+		UserInfo user = userInfoService.getUserByUsername(username).orElseThrow();
+		UserInfo friend = userInfoService.getUserByUsername(friendName).orElseThrow();
+		
+		List<Friend> userFriends = user.getFriends();
+		List<Friend> friendFriends = friend.getFriends();
+		
+		for(Friend f : userFriends) {
+			if(f.getUsername().equals(friendName)) {
+				userFriends.remove(f);
+				user.setFriends(userFriends);
+				userInfoService.save(user);
+			}
+		}
+		
+		for(Friend f : friendFriends) {
+			if(f.getUsername().equals(username)) {
+				friendFriends.remove(f);
+				friend.setFriends(friendFriends);
+				userInfoService.save(friend);
+			}
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
