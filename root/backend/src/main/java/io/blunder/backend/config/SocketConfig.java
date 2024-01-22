@@ -23,6 +23,9 @@ public class SocketConfig {
 
 	@Value("${keystore.name}")
 	private String keyStoreName;
+	
+	@Value("${local}")
+	private boolean local;
 
 	@Bean
 	public SocketIOServer socketIOServer() {
@@ -32,10 +35,12 @@ public class SocketConfig {
 		config.setOrigin("*");
 		config.setAuthorizationListener(new SocketAuthorizationListener());
 
-		config.setKeyStorePassword(keyStorePassword);
-		InputStream stream = getClass().getClassLoader().getResourceAsStream(keyStoreName);
-		config.setKeyStore(stream);
-		config.setSSLProtocol("TLS");
+		if(local != true) {
+			config.setKeyStorePassword(keyStorePassword);
+			InputStream stream = getClass().getClassLoader().getResourceAsStream(keyStoreName);
+			config.setKeyStore(stream);
+			config.setSSLProtocol("TLS");
+		}
 
 		return new SocketIOServer(config);
 	}
