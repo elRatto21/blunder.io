@@ -82,7 +82,7 @@ const RecentMatches = () => {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-3/4">
+        <table className="w-full md:w-3/4">
           <thead className="text-left font-bold text-gray-500 dark:text-gray-300">
             <tr>
               <th className="pb-2">Date</th>
