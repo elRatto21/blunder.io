@@ -11,8 +11,8 @@ function Navbar() {
                             <div className="flex-shrink-0">
                                 <a href="/"><FontAwesomeIcon icon={faChess} className="h-6 w-6 text-blue-600 dark:text-white" /></a>
                             </div>
-                            <div className="hidden md:block">
-                                <div className="ml-10 flex items-baseline space-x-4">
+                            <div className="block">
+                                <div className="md:ml-10 ml-5 flex items-baseline md:space-x-4">
                                     <div className="relative group">
                                         <a href="/" className="text-gray-700 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                             Play
