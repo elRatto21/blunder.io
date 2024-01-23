@@ -3,8 +3,8 @@ import { ThreeDots } from "react-loader-spinner";
 
 function OnlineSearching() {
   return (
-    <div className="dark:bg-gray-800 flex flex-col md:flex-row min-h-screen pt-16 dark:text-white">
-      <div id="board" className="w-2/5 p-8">
+    <div className="dark:bg-gray-800 flex flex-col md:flex-row pt-24 md:pt-16 items-center md:items-start gap-6 md:gap-0 md:min-h-screen dark:text-white">
+      <div id="board" className="md:w-2/5 w-5/6 md:p-8 p-4">
         <Chessboard
           id="ClickToMove"
           boardOrientation="white"
