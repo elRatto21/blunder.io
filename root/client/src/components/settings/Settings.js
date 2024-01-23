@@ -121,7 +121,7 @@ const SettingsPage = () => {
 }
 
     return (
-        <div className={`min-h-screen flex flex-col items-center justify-center py-5 px-4 sm:px-6 lg:px-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className={`min-h-screen flex flex-col items-center pt-24 md:pt-0 md:justify-center py-5 px-4 sm:px-6 lg:px-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
            {showModal === true ? (About()) : null}
             <div className="rounded-md flex items-center flex-col shadow-[0_1px_5px_rgb(0,0,0,0.15)] w-full sm:max-w-md p-6 space-y-4 bg-white dark:bg-gray-700">
                 <h1 className="text-2xl font-bold text-center dark:text-white">Settings</h1>
