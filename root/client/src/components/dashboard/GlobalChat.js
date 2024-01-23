@@ -56,7 +56,7 @@ function GlobalChat() {
         Global Chat
       </h2>
 
-      <div className="h-[24rem] xl:h-[40rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
+      <div className="h-[12rem] md:h-[24rem] xl:h-[40rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
         {messages.map((message) => (
           <Message username={message.username} content={message.content} />
         ))}

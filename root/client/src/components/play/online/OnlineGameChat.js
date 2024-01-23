@@ -51,12 +51,12 @@ function OnlineGameChat() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg p-6 mt-8">
+    <div className="bg-white dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] shadow-[0_1px_5px_rgb(0,0,0,0.15)] rounded-lg md:p-6 p-4 md:mt-8">
       <h2 className="text-xl font-bold text-blue-600 dark:text-white">
         Chat
       </h2>
 
-      <div className="h-[25rem] xl:h-[40rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
+      <div className="h-[10rem] md:h-[25rem] xl:h-[40rem] overflow-x-hidden overflow-y-scroll px-2 mb-5">
         {messages.map((message) => (
           <Message username={message.username} content={message.content} />
         ))}
@@ -77,9 +77,9 @@ function OnlineGameChat() {
         />
         <button
           onClick={sendMessage}
-          className="w-16 ml-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center justify-center"
+          className="w-16 md:ml-2 -ml-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center justify-center"
         >
-          <FontAwesomeIcon icon={faPaperPlane} className="w-4 h-4" />
+          <FontAwesomeIcon icon={faPaperPlane} className="md:w-4 w-10 h-4" />
         </button>
       </form>
     </div>

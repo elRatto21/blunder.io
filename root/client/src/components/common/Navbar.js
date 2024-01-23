@@ -11,13 +11,13 @@ function Navbar() {
                             <div className="flex-shrink-0">
                                 <a href="/"><FontAwesomeIcon icon={faChess} className="h-6 w-6 text-blue-600 dark:text-white" /></a>
                             </div>
-                            <div className="hidden md:block">
-                                <div className="ml-10 flex items-baseline space-x-4">
+                            <div className="block">
+                                <div className="md:ml-10 ml-5 flex items-baseline md:space-x-4">
                                     <div className="relative group">
                                         <a href="/" className="text-gray-700 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                             Play
                                         </a>
-                                        <div className="absolute left-0 w-fit mt-2 origin-top rounded-md shadow-lg bg-white dark:bg-gray-800 z-10 hidden group-hover:block -translate-y-2">
+                                        <div className="absolute left-0 w-fit mt-2 origin-top rounded-md shadow-lg bg-white dark:bg-gray-800 z-10 hidden md:group-hover:block -translate-y-2">
                                             <div className="py-1">
                                                 <a href="/online" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white">Online</a>
                                                 <a href="/offline" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white">Offline</a>
