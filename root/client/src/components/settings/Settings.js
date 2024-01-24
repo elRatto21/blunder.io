@@ -109,7 +109,7 @@ const SettingsPage = () => {
 
                 <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                     <span className='text-black font-semibold dark:text-white'>Metadata</span><br />
-                    Version 1.0 Beta (23.11.2023)<br />
+                    Version 1.1 Beta (24.01.2024)<br />
                     <a href='https://github.com/elRatto21/blunder.io' target='_blank' className='text-blue-500 dark:text-blue-400' rel='noreferrer'>Sourcecode</a>
                 </p>
                 </div>
