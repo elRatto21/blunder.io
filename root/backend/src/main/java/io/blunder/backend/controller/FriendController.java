@@ -1,6 +1,7 @@
 package io.blunder.backend.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -113,6 +115,41 @@ public class FriendController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PostMapping("/remove/{friendName}")
+	public ResponseEntity<?> removeFriend(@PathVariable String friendName, HttpServletRequest request) {
+	    String jwtToken = extractTokenFromRequest(request);
+	    String username = jwtUtils.getUserNameFromJwtToken(jwtToken);
+
+	    UserInfo user = userInfoService.getUserByUsername(username).orElseThrow();
+	    UserInfo friend = userInfoService.getUserByUsername(friendName).orElseThrow();
+
+	    List<Friend> userFriends = new ArrayList<>(user.getFriends());
+	    List<Friend> friendFriends = new ArrayList<>(friend.getFriends());
+
+	    Iterator<Friend> userIterator = userFriends.iterator();
+	    while (userIterator.hasNext()) {
+	        Friend f = userIterator.next();
+	        if (f.getUsername().equals(friendName)) {
+	            userIterator.remove();
+	            user.setFriends(userFriends);
+	            userInfoService.save(user);
+	        }
+	    }
+
+	    Iterator<Friend> friendIterator = friendFriends.iterator();
+	    while (friendIterator.hasNext()) {
+	        Friend f = friendIterator.next();
+	        if (f.getUsername().equals(username)) {
+	            friendIterator.remove();
+	            friend.setFriends(friendFriends);
+	            userInfoService.save(friend);
+	        }
+	    }
+
+	    return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	
 	
 	@PostMapping("/request/decline") 
 	public ResponseEntity<?> declineRequest(@RequestParam String username, @RequestParam String friendName, HttpServletRequest request) {
@@ -130,24 +167,28 @@ public class FriendController {
 		UserInfo user = userInfoService.getUserByUsername(username).orElseThrow();
 		UserInfo friend = userInfoService.getUserByUsername(friendName).orElseThrow();
 		
-		List<Friend> userFriends = user.getFriends();
-		List<Friend> friendFriends = friend.getFriends();
-		
-		for(Friend f : userFriends) {
-			if(f.getUsername().equals(friendName)) {
-				userFriends.remove(f);
-				user.setFriends(userFriends);
-				userInfoService.save(user);
-			}
-		}
-		
-		for(Friend f : friendFriends) {
-			if(f.getUsername().equals(username)) {
-				friendFriends.remove(f);
-				friend.setFriends(friendFriends);
-				userInfoService.save(friend);
-			}
-		}
+		List<Friend> userFriends = new ArrayList<>(user.getFriends());
+	    List<Friend> friendFriends = new ArrayList<>(friend.getFriends());
+
+	    Iterator<Friend> userIterator = userFriends.iterator();
+	    while (userIterator.hasNext()) {
+	        Friend f = userIterator.next();
+	        if (f.getUsername().equals(friendName)) {
+	            userIterator.remove();
+	            user.setFriends(userFriends);
+	            userInfoService.save(user);
+	        }
+	    }
+
+	    Iterator<Friend> friendIterator = friendFriends.iterator();
+	    while (friendIterator.hasNext()) {
+	        Friend f = friendIterator.next();
+	        if (f.getUsername().equals(username)) {
+	            friendIterator.remove();
+	            friend.setFriends(friendFriends);
+	            userInfoService.save(friend);
+	        }
+	    }
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
