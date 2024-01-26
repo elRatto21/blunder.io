@@ -44,7 +44,7 @@ const SettingsPage = () => {
             id="default-modal"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto bg-black bg-opacity-10 dark:bg-opacity-50 overflow-x-hidden fixed z-50 flex justify-center items-center w-full md:inset-0 min-h-full"
+            class="-translate-y-5 md:-translate-y-0 overflow-y-auto bg-black bg-opacity-10 dark:bg-opacity-50 overflow-x-hidden fixed z-50 flex justify-center items-center w-full md:inset-0 min-h-full"
             >
             <div class="p-4 max-w-2xl">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -109,7 +109,7 @@ const SettingsPage = () => {
 
                 <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                     <span className='text-black font-semibold dark:text-white'>Metadata</span><br />
-                    Version 1.0 Beta (23.11.2023)<br />
+                    Version 1.1 Beta (24.01.2024)<br />
                     <a href='https://github.com/elRatto21/blunder.io' target='_blank' className='text-blue-500 dark:text-blue-400' rel='noreferrer'>Sourcecode</a>
                 </p>
                 </div>
@@ -121,9 +121,9 @@ const SettingsPage = () => {
 }
 
     return (
-        <div className={`min-h-screen flex flex-col items-center justify-center py-5 px-4 sm:px-6 lg:px-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className={`min-h-screen flex flex-col items-center md:justify-center py-5 px-4 sm:px-6 lg:px-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
            {showModal === true ? (About()) : null}
-            <div className="rounded-md flex items-center flex-col shadow-[0_1px_5px_rgb(0,0,0,0.15)] w-full sm:max-w-md p-6 space-y-4 bg-white dark:bg-gray-700">
+            <div className="rounded-md mt-24 md:mt-0 flex items-center flex-col shadow-[0_1px_5px_rgb(0,0,0,0.15)] w-full sm:max-w-md p-6 space-y-4 bg-white dark:bg-gray-700">
                 <h1 className="text-2xl font-bold text-center dark:text-white">Settings</h1>
                 <div className='w-5/6'>
                 <div onClick={toggleTheme} className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-600 rounded-sm">

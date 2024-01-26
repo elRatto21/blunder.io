@@ -185,20 +185,21 @@ function OfflineGamePage() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 min-h-screen pt-16 grid grid-cols-4 grid-rows-1 gap-0 dark:text-white">
-      <div className="col-span-1 flex flex-col items-end pt-72 gap-8">
-        <div className="h-1/6 w-11/12 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] rounded-lg p-6 dark:bg-gray-700 font-semibold text-3xl flex justify-center items-center">
+    <div className="bg-white dark:bg-gray-800 min-h-screen">
+    <div className="min-h-screen pt-16 flex flex-col justify-center items-center md:grid grid-cols-4 grid-rows-1 gap-0 dark:text-white">
+      <div className="col-span-1 flex flex-col items-end md:pt-72 gap-4 md:gap-8">
+        <div className="h-1/6 w-full md:w-11/12 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] rounded-lg p-6 dark:bg-gray-700 font-semibold text-3xl flex justify-center items-center">
           {mate ? <div>{mate}!</div> : <div>{turnColor}'s turn</div>}
         </div>
         <button
           onClick={resetGame}
-          className="w-11/12 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-gray-600 active:bg-blue-800"
+          className="w-full md:w-11/12 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-gray-600 active:bg-blue-800"
         >
           Reset Game
         </button>
       </div>
-      <div className="w-full col-span-2 flex justify-center items-center pb-20">
-        <div className="w-2/3 m-auto">
+      <div className="pt-10 md:pt-0 w-full col-span-2 flex justify-center items-center md:pb-20 pb-10">
+        <div className="w-11/12 md:w-2/3 m-auto">
           <Chessboard
             id="ClickToMove"
             animationDuration={200}
@@ -218,7 +219,7 @@ function OfflineGamePage() {
           />
         </div>
       </div>
-      <div className="col-start-4 pb-20 flex flex-col justify-center items-start gap-64 text-3xl font-semibold">
+      <div className="col-start-4 pb-20 flex md:flex-col justify-between md:justify-center items-start md:gap-64 text-3xl font-semibold">
         <div
           className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 w-2/5 p-6 rounded-lg flex flex-row justify-center items-center"
           style={{ color: game.turn() === "b" ? "red" : getColor() }}
@@ -244,6 +245,7 @@ function OfflineGamePage() {
           </span>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -352,11 +352,11 @@ const GamePage = () => {
         <OnlineSearching />
       ) : (
         <div className="dark:bg-gray-800 flex justify-center">
-          <div className="bg-white dark:bg-gray-800 w-full items-start xl:w-4/5 flex flex-col md:flex-row min-h-screen pt-16 justify-between px-16">
-            <div className="col-start-4 pt-8 flex flex-col justify-center items-center gap-32 xl:gap-56 text-2xl xl:text-3xl font-semibold">
+          <div className="bg-white dark:bg-gray-800 w-full items-start xl:w-4/5 flex flex-col md:flex-row min-h-screen md:pt-16 pt-12 md:justify-between md:px-16 px-4">
+            <div className="w-full md:w-fit md:col-start-4 pt-8 flex md:flex-col justify-between md:justify-center items-center md:gap-32 xl:gap-56 text-xl md:text-2xl xl:text-3xl font-semibold">
               {playerSide === "black" ? (
                 <div
-                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-4 md:p-6 rounded-lg flex flex-row justify-center items-center"
                   style={{ color: game.turn() === "w" ? "red" : getColor() }}
                 >
                   <FontAwesomeIcon icon={faClock} />
@@ -369,7 +369,7 @@ const GamePage = () => {
                 </div>
               ) : (
                 <div
-                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-4 md:p-6 rounded-lg flex flex-row justify-center items-center"
                   style={{ color: game.turn() === "b" ? "red" : getColor() }}
                 >
                   <FontAwesomeIcon icon={faClock} />
@@ -396,7 +396,7 @@ const GamePage = () => {
 
               {playerSide === "white" ? (
                 <div
-                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-6 rounded-lg flex flex-row justify-center items-center"
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] dark:bg-gray-700 p-4 md:p-6 rounded-lg flex flex-row justify-center items-center"
                   style={{ color: game.turn() === "w" ? "red" : getColor() }}
                 >
                   <FontAwesomeIcon icon={faClock} />
@@ -409,7 +409,7 @@ const GamePage = () => {
                 </div>
               ) : (
                 <div
-                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] p-6 rounded-lg flex flex-row justify-center items-center"
+                  className="shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:bg-gray-700 dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] p-4 md:p-6 rounded-lg flex flex-row justify-center items-center"
                   style={{ color: game.turn() === "b" ? "red" : getColor() }}
                 >
                   <FontAwesomeIcon icon={faClock} />
@@ -423,7 +423,7 @@ const GamePage = () => {
               )}
             </div>
 
-            <div id="board" className="w-1/2 p-8 xl:w-3/5">
+            <div id="board" className="mt-8 md:mt-16 w-full md:w-1/2 md:first-letter:p-8">
               <Chessboard
                 id="ClickToMove"
                 boardOrientation={playerSide}
@@ -443,7 +443,7 @@ const GamePage = () => {
                 }}
               />
             </div>
-            <div className="h-96 w-1/3">
+            <div className="mt-8 md:mt-0 md:h-96 md:w-1/3 w-full">
               <OnlineGameChat />
             </div>
           </div>

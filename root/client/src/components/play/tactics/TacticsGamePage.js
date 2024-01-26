@@ -44,7 +44,6 @@ function TacticsGamePage() {
       setRightClickedSquares({});
       setTries(0);
       setSolved(false);
-      console.log(response.data);
 
       if (puzzle.fen.split(" ")[1] === "w") {
         setPlayerSide("black");
@@ -161,7 +160,6 @@ function TacticsGamePage() {
           to: square,
           promotion: "q",
         });
-        console.log("move made " + move);
       } catch (error) {}
 
       if (move === null) {
@@ -174,7 +172,6 @@ function TacticsGamePage() {
       setOptionSquares({});
 
       if (move) {
-        console.log("tries " + tries);
         const correctMove = moves[moveIndex];
         if (
           correctMove &&
@@ -184,7 +181,6 @@ function TacticsGamePage() {
           setSuccessMessage("Best Move!");
           setMoveIndex((prevMoveIndex) => prevMoveIndex + 1);
           setFen(game.fen());
-          console.log(moveIndex + " " + (moves.length - 2));
           if (moveIndex === moves.length - 1) {
             setFen(game.fen());
             setCompleted(true);
@@ -226,11 +222,11 @@ function TacticsGamePage() {
   }
 
   return (
-    <div className="grid min-h-screen grid-cols-4 grid-rows-1 gap-0 w-full justify-center items-center dark:bg-gray-800">
+    <div className="flex flex-col gap-8 pt-32 md:pt-0 md:gap-0 md:grid min-h-screen grid-cols-1 md:grid-cols-4 grid-rows-3 md:grid-rows-1 w-full md:justify-center items-center dark:bg-gray-800">
       <div className="w-full col-span-1 flex flex-col justify-center items-end"></div>
-      <div className="w-full col-span-2 flex justify-center items-center">
+      <div className="w-full col-span-1 md:col-span-2 flex justify-center items-center">
         {fen && (
-          <div className="w-2/3">
+          <div className="md:w-2/3 w-5/6">
             <Chessboard
               id="ClickToMove"
               animationDuration={200}
@@ -252,7 +248,7 @@ function TacticsGamePage() {
         )}
       </div>
 
-      <div className="col-start-4 w-full h-full flex flex-col justify-center items-star">
+      <div className="md:col-start-4 col-span-1 w-full h-full flex flex-col justify-center items-center md:items-start">
         <div className="w-2/3 h-fit p-5 shadow-[0_1px_5px_rgb(0,0,0,0.15)] dark:shadow-[0_1px_5px_rgb(0,0,0,0.4)] gap-6 flex dark:bg-gray-700 dark:text-white justify-center items-center flex-col rounded-lg">
           <div className="text-2xl font-bold">{successMessage}</div>
           {completed || showReset ? (
