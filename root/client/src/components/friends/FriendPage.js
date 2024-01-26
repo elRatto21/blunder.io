@@ -231,13 +231,13 @@ const FriendPage = () => {
             maxBodyLength: Infinity,
             url: process.env.REACT_APP_API + "/api/friends/remove/" + friendName,
             headers: {
-              "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("accessToken")
             },
           };
           axios
             .request(config)
             .then(() => {
-                toast.success('Successfully removed ' + friendName + ' from your friends.');
+                navigate(0)
             })
             .catch(function () {
                 toast.error(
@@ -434,7 +434,7 @@ const FriendPage = () => {
 
                 <div className="w-2/3 flex gap-8 flex-wrap">
                     {friends.map((friend) => (
-                        <FriendCard onShowChallenge={handleChallenge} onRemove={() => rejectRequest(friend.username)} username={friend.username} online={friend.online} />
+                        <FriendCard onShowChallenge={handleChallenge} onRemove={() => handleRemove(friend.username)} username={friend.username} online={friend.online} />
                     ))}
                 </div>
             </div>
