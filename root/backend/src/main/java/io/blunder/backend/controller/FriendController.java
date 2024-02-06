@@ -6,12 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.blunder.backend.model.Chat;
 import io.blunder.backend.model.Friend;
+import io.blunder.backend.model.Message;
 import io.blunder.backend.model.UserInfo;
 import io.blunder.backend.security.jwt.JwtUtils;
+import io.blunder.backend.service.ChatService;
 import io.blunder.backend.service.SocketService;
 import io.blunder.backend.service.UserInfoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +39,9 @@ public class FriendController {
 	
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	@Autowired
+	ChatService chatService;
 
 	@GetMapping()
 	public ResponseEntity<?> getFriends(@RequestParam(name = "username", required = true) String username) {
@@ -232,6 +233,28 @@ public class FriendController {
 		userInfoService.save(friend);
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/chat")
+	public ResponseEntity<?> getChat(@RequestParam String username, @RequestParam String friendName) {
+		Chat search1 = this.chatService.findByBothUsers(username, friendName);
+		Chat search2 = this.chatService.findByBothUsers(friendName, username);
+		
+		Chat chat = null;
+		
+		if(search1 == null && search2 == null) {
+			chat = new Chat();
+			chat.setUser1(username);
+			chat.setUser2(friendName);
+			chat.setMessages(new ArrayList<Message>());
+			this.chatService.save(chat);
+		} else if (search1 != null && search2 == null) {
+			chat = search1;
+		} else if (search1 == null && search2 != null) {
+			chat = search2;
+		}
+		
+		return new ResponseEntity<>(chat, HttpStatus.OK);
 	}
 	
 	private String extractTokenFromRequest(HttpServletRequest request) {
