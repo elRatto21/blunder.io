@@ -20,6 +20,7 @@ import UnderConstruction from "./components/common/UnderConstruction";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import FriendPage from "./components/friends/FriendPage";
+import FriendChat from "./components/friends/FriendChat";
 
 library.add(faUserGroup, faPuzzlePiece);
 
@@ -62,6 +63,8 @@ const App = () => {
               <Route path="settings" element={<Settings />} />
 
               <Route path="friends" element={<FriendPage />} />
+              <Route path="friends/chat/:friendId" element={<FriendChat />} />
+
               <Route path="shop" element={<UnderConstruction />} />
 
               <Route path="*" element={<NotFound />} />
